@@ -1,4 +1,4 @@
-# AWS Career Guidance AI System
+# AWS Course Recommendation AI System
 
 A comprehensive AI-powered career guidance platform that combines multiple data sources and advanced machine learning to provide personalized career advice, course recommendations, and project guidance.
 
