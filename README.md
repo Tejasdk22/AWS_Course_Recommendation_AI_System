@@ -11,19 +11,6 @@ A comprehensive AI-powered career guidance platform that combines multiple data 
 - **Project Guidance**: Hands-on project suggestions for practical experience
 - **Modern UI**: Responsive React frontend with beautiful, intuitive design
 
-## 🏗️ Architecture
-
-### Backend (Python)
-- **Multi-Agent System**: Four specialized agents for different aspects of career guidance
-- **FastAPI**: Modern, fast web framework for building APIs
-- **AWS Bedrock**: Integration with Claude 3 Sonnet for advanced AI capabilities
-- **Async Processing**: Concurrent agent execution for optimal performance
-
-### Frontend (React)
-- **React 18**: Modern React with hooks and functional components
-- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
-- **Context API**: State management for application-wide data
-- **Responsive Design**: Mobile-first approach with beautiful UI components
 
 ### AI Agents
 
