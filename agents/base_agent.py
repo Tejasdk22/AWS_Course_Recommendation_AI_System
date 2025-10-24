@@ -1,5 +1,5 @@
 """
-Base Agent class for AWS Career Guidance AI System
+Base Agent class for AWS Course Recommendation AI System
 """
 
 import logging

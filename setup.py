@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='aws-career-guidance-ai',
+    name='aws-course-recommendation-ai',
     version='1.0.0',
-    description='AWS Career Guidance AI System with multi-agent architecture',
+    description='AWS Course Recommendation AI System with multi-agent architecture',
     author='Your Name',
     author_email='your.email@example.com',
     packages=find_packages(),

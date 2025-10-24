@@ -1,5 +1,5 @@
 """
-Career Matching Agent for AWS Career Guidance AI System
+Course Recommendation Matching Agent for AWS Course Recommendation AI System
 Matches job market requirements with course offerings using cosine similarity
 """
 

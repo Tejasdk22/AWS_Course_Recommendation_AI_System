@@ -1,5 +1,5 @@
 """
-Project Advisor Agent for AWS Career Guidance AI System
+Project Advisor Agent for AWS Course Recommendation AI System
 Analyzes skill gaps and suggests hands-on projects for career development
 """
 

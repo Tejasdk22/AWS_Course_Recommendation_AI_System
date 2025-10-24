@@ -1,5 +1,5 @@
 """
-Course Catalog Agent for AWS Career Guidance AI System
+Course Catalog Agent for AWS Course Recommendation AI System
 Crawls UTD course catalog to extract course information and skill mappings
 """
 

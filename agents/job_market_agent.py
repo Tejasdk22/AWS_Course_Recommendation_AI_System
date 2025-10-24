@@ -1,5 +1,5 @@
 """
-Job Market Agent for AWS Career Guidance AI System
+Job Market Agent for AWS Course Recommendation AI System
 Scrapes job postings from LinkedIn and Indeed to analyze market trends
 """
 
