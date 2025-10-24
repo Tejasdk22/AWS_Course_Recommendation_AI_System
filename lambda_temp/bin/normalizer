@@ -1,0 +1,7 @@
+#!/Users/tejasdeshkulkarni/Documents/Projects/AWS_Career_Guidance_AI_System/bedrock_env/bin/python3
+import sys
+from charset_normalizer.cli import cli_detect
+if __name__ == '__main__':
+    if sys.argv[0].endswith('.exe'):
+        sys.argv[0] = sys.argv[0][:-4]
+    sys.exit(cli_detect())
