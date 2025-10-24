@@ -24,7 +24,7 @@ A comprehensive AI-powered career guidance platform that combines multiple data 
 ### Prerequisites
 
 - Python 3.9+
-- Node.js 16+
+- Streamlit
 - AWS Account with Bedrock access
 - Git
 
@@ -32,8 +32,8 @@ A comprehensive AI-powered career guidance platform that combines multiple data 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/aws-career-guidance-ai.git
-   cd aws-career-guidance-ai
+   git clone https://github.com/your-username/AWS_Course_Recommendation_AI_System.git
+   cd AWS_Course_Recommendation_AI_System
    ```
 
 2. **Set up Python environment**
