@@ -137,7 +137,7 @@ REQUEST_TIMEOUT=30
 
 1. **Enable Bedrock in your AWS account**
    - Go to AWS Bedrock console
-   - Request access to Claude 3 Sonnet model
+   - Request access to Amazon Titan Express
    - Wait for approval (usually instant)
 
 2. **Configure IAM permissions**
@@ -151,7 +151,7 @@ REQUEST_TIMEOUT=30
            "bedrock:InvokeModel",
            "bedrock:InvokeModelWithResponseStream"
          ],
-         "Resource": "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0"
+         "Resource": "arn:aws:bedrock:*::foundation-model/Amazon-Titan-Express"
        }
      ]
    }
@@ -279,7 +279,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - AWS Bedrock for AI capabilities
-- Anthropic for Claude 3 Sonnet model
+- Amazon Titan Express
 - React and Tailwind CSS communities
 - FastAPI and Python ecosystem
 
@@ -298,7 +298,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Salary negotiation guidance
 - [ ] Networking recommendations
 - [ ] Mobile app development
-
----
-
-**Built with ❤️ using AWS Bedrock, React, and Python**
