@@ -80,9 +80,26 @@ frontend/dist/
 .pytest_cache/
 htmlcov/
 
-# AWS
+# AWS Credentials and Configuration
 .aws/
 aws-exports.js
+.aws-credentials
+.aws-credentials.json
+aws-credentials.txt
+aws-credentials.env
+.aws/config
+.aws/credentials
+.aws/credentials.bak
+.aws/config.bak
+aws-keys.txt
+aws-secrets.txt
+credentials.json
+aws-config.json
+.aws-keys
+.aws-secrets
+aws_access_key_id.txt
+aws_secret_access_key.txt
+aws_session_token.txt
 
 # Docker
 .dockerignore
