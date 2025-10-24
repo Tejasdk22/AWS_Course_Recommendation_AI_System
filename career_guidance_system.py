@@ -1,5 +1,5 @@
 """
-Career Guidance System - Multi-Agent Coordination Controller
+Course Recommendation - Multi-Agent Coordination Controller
 Orchestrates all agents and provides unified career guidance responses
 """
 
