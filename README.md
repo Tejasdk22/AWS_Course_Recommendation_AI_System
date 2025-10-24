@@ -4,7 +4,6 @@ A comprehensive AI-powered career guidance platform that combines multiple data 
 
 ## 🌟 Features
 
-- **AI-Powered Analysis**: Advanced machine learning algorithms analyze job markets, course catalogs, and career paths
 - **Multi-Agent Architecture**: Four specialized AI agents working together for comprehensive guidance
 - **AWS Bedrock Integration**: Enterprise-grade AI capabilities using Amazon Titan Enterprise 
 - **Real-time Data**: Live job market insights and course recommendations
