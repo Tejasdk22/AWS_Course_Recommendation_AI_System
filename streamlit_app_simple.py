@@ -324,12 +324,12 @@ As a {major} {student_type} student at UTD, you're on the right path to becoming
 
 ### Elective Courses
 - **BUAN 6353 - Business Intelligence**: BI tools and dashboard development
+- **BUAN 6354 - Advanced Analytics**: Advanced analytical techniques
 - **MIS 6320 - Database Management**: Database design and management systems
 - **MIS 6321 - Data Warehousing**: Data warehouse design and implementation
-- **CS 6363 - Data Mining**: Discover patterns in large datasets
-- **CS 6375 - Advanced Machine Learning**: Deep learning and neural networks
-- **ITSS 4355 - Data Visualization**: Advanced visualization techniques
-- **MATH 4355 - Time Series Analysis**: Statistical analysis of time-dependent data
+- **MIS 6340 - IT Strategy**: Strategic IT management
+- **OPRE 6361 - Operations Research**: Optimization techniques
+- **OPRE 6370 - Supply Chain Analytics**: Analytics in operations
 
 ## Skills to Develop
 {chr(10).join([f"- {skill}" for skill in skills])}
@@ -338,11 +338,11 @@ As a {major} {student_type} student at UTD, you're on the right path to becoming
 {chr(10).join([f"1. {project}" for project in projects])}
 
 ## UTD Academic Timeline
-- **Fall Semester**: Focus on core programming and statistics courses (CS 4375, BUAN 6351)
-- **Spring Semester**: Take machine learning and database courses (CS 6350, CS 6360)
+- **Fall Semester**: Focus on core analytics courses (BUAN 6345, BUAN 6350)
+- **Spring Semester**: Take advanced analytics and database courses (BUAN 6356, MIS 6320)
 - **Summer**: Internship or research project with UTD faculty
-- **Fall Semester**: Advanced topics and electives (CS 6375, BUAN 6353)
-- **Spring Semester**: Capstone project and specialization (CS 6390, ITSS 4355)
+- **Fall Semester**: Advanced topics and electives (BUAN 6352, BUAN 6353)
+- **Spring Semester**: Capstone project and specialization (BUAN Capstone, MIS 6321)
 
 ## Next Steps at UTD
 1. **Enroll in recommended courses**: Use UTD's course registration system
