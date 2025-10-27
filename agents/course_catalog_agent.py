@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import time
 from datetime import datetime
+import re as regex
 try:
     from .base_agent import BaseAgent
 except ImportError:
@@ -518,14 +519,20 @@ class CourseCatalogAgent(BaseAgent):
         for course in courses:
             course_code = course.get('course_code', '')
             # Extract prefix (first part before space or number)
-            prefix_match = course_code.split()[0] if ' ' in course_code else course_code[:4]
+            # Handle both "BUAN 6345" (with space) and "BUAN6345" (no space) formats
+            if ' ' in course_code:
+                prefix_match = course_code.split()[0]
+            else:
+                # Extract letters before numbers, e.g., "BUAN6345" -> "BUAN"
+                prefix_match = regex.match(r'^([A-Z]+)', course_code.upper())
+                prefix_match = prefix_match.group(1) if prefix_match else course_code[:4]
             
             if any(allowed.upper() == prefix_match.upper() for allowed in allowed_prefixes):
                 filtered_courses.append(course)
             else:
-                self.logger.debug(f"Filtering out course {course_code} - not in allowed prefixes for {major}")
+                self.logger.debug(f"Filtering out course {course_code} - prefix '{prefix_match}' not in allowed prefixes {allowed_prefixes} for {major}")
         
-        self.logger.info(f"Filtered {len(courses)} courses to {len(filtered_courses)} for major {major}")
+        self.logger.info(f"Filtered {len(courses)} courses to {len(filtered_courses)} for major {major} (allowed prefixes: {allowed_prefixes})")
         return filtered_courses
     
     def process_data(self, data: List[Dict[str, Any]]) -> Dict[str, Any]:
