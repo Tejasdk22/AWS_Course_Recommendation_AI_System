@@ -134,17 +134,17 @@ class CourseCatalogAgent(BaseAgent):
         # Students can only take courses within their major's allowed prefixes
         # Note: ITSS is undergraduate-level; graduate ITM students use MIS, SYSM, ITM
         self.major_allowed_prefixes = {
-            'business analytics': ['BUAN', 'MIS', 'OPRE'],
+            'business analytics': ['BUAN', 'MIS', 'OPRE', 'FIN', 'ACCT', 'MKT'],
             'information technology and management': ['MIS', 'IMS', 'OPRE', 'FIN', 'ACCT', 'MKT', 'ENTP', 'OB', 'HMGT', 'BPS', 'MECO', 'REAL'],
-            'computer science': ['CS', 'SE', 'CE'],
-            'software engineering': ['SE', 'CS', 'CE'],
-            'electrical engineering': ['EE', 'CE', 'CS'],
+            'computer science': ['CS', 'SE', 'CE', 'MATH', 'STAT'],
+            'software engineering': ['SE', 'CS', 'CE', 'MATH'],
+            'electrical engineering': ['EE', 'CE', 'CS', 'MATH', 'PHYS'],
             'cybersecurity': ['CS', 'CE'],
-            'management information systems': ['MIS', 'BUAN'],
-            'accounting': ['ACCT', 'OPRE'],
-            'finance': ['FIN', 'OPRE'],
-            'marketing': ['MKT', 'OPRE'],
-            'supply chain management': ['SCM', 'OPRE', 'SYSM'],
+            'management information systems': ['MIS', 'BUAN', 'ITSS', 'OPRE', 'FIN', 'MKT'],
+            'accounting': ['ACCT', 'OPRE', 'FIN', 'MKT', 'MECO'],
+            'finance': ['FIN', 'OPRE', 'ACCT', 'MKT', 'MECO', 'REAL'],
+            'marketing': ['MKT', 'OPRE', 'ENTP', 'FIN', 'MIS'],
+            'supply chain management': ['SCM', 'OPRE', 'IMSE', 'SYSM', 'FIN', 'MKT'],
         }
     
     async def fetch_data(self, major: str = None, student_type: str = None) -> List[Dict[str, Any]]:
