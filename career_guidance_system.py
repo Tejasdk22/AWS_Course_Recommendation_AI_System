@@ -88,7 +88,7 @@ class CareerGuidanceSystem:
             ]
         )
     
-    async def process_query(self, user_query: str, session_id: str = None) -> CareerGuidanceResponse:
+    async def process_query(self, user_query: str, session_id: str = None, major: str = None, student_type: str = None) -> CareerGuidanceResponse:
         """
         Process a user query through all agents and return unified response.
         
@@ -113,7 +113,7 @@ class CareerGuidanceSystem:
                     return cached_response
             
             # Run all agents concurrently
-            agent_responses = await self._run_agents_concurrently(user_query)
+            agent_responses = await self._run_agents_concurrently(user_query, major=major, student_type=student_type)
             
             # Generate unified response
             unified_response = await self._generate_unified_response(
@@ -150,7 +150,7 @@ class CareerGuidanceSystem:
             self.logger.error(f"Error processing query for session {session_id}: {e}")
             return self._create_error_response(user_query, session_id, str(e))
     
-    async def _run_agents_concurrently(self, user_query: str) -> Dict[str, str]:
+    async def _run_agents_concurrently(self, user_query: str, major: str = None, student_type: str = None) -> Dict[str, str]:
         """
         Run all agents concurrently to gather insights.
         
@@ -165,7 +165,7 @@ class CareerGuidanceSystem:
         # Create tasks for each agent
         tasks = {
             'job_market': self._run_job_market_agent(user_query),
-            'course_catalog': self._run_course_catalog_agent(user_query),
+            'course_catalog': self._run_course_catalog_agent(user_query, major=major, student_type=student_type),
             'career_matching': self._run_career_matching_agent(user_query),
             'project_advisor': self._run_project_advisor_agent(user_query)
         }
@@ -205,10 +205,10 @@ class CareerGuidanceSystem:
             self.logger.error(f"Job market agent error: {e}")
             return f"Job market analysis unavailable: {str(e)}"
     
-    async def _run_course_catalog_agent(self, user_query: str) -> str:
+    async def _run_course_catalog_agent(self, user_query: str, major: str = None, student_type: str = None) -> str:
         """Run course catalog agent."""
         try:
-            return await self.course_catalog_agent.run(user_query)
+            return await self.course_catalog_agent.run(user_query, major=major, student_type=student_type)
         except Exception as e:
             self.logger.error(f"Course catalog agent error: {e}")
             return f"Course catalog analysis unavailable: {str(e)}"

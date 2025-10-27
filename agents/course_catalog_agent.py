@@ -26,6 +26,72 @@ class CourseCatalogAgent(BaseAgent):
     
     def __init__(self):
         super().__init__("CourseCatalogAgent")
+        
+        # Major to UTD catalog URL mapping
+        self.major_catalog_mapping = {
+            # Graduate programs
+            'business analytics': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/business-analytics',
+                'undergraduate': None
+            },
+            'information technology and management': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/information-technology-management',
+                'undergraduate': None
+            },
+            'accounting': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/accounting',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/accounting'
+            },
+            'finance': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/finance',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/finance'
+            },
+            'marketing': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/marketing',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/marketing'
+            },
+            'supply chain management': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/supply-chain-management',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/supply-chain-management'
+            },
+            'management information systems': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/information-systems',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/information-systems'
+            },
+            'computer science': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/computer-science',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/computer-science'
+            },
+            'software engineering': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/software-engineering',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/software-engineering'
+            },
+            'electrical engineering': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/electrical-engineering',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/electrical-engineering'
+            },
+            'cybersecurity': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/cybersecurity',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/cybersecurity'
+            },
+            'data science': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/data-science-statistics',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/data-science'
+            },
+            'data science and statistics': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/data-science-statistics',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/data-science'
+            },
+            'mathematics': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/mathematics',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/mathematics'
+            },
+            'statistics': {
+                'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/statistics',
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/statistics'
+            }
+        }
+        
         self.course_sites = {
             'utd': {
                 'base_url': 'https://catalog.utdallas.edu',
@@ -45,15 +111,24 @@ class CourseCatalogAgent(BaseAgent):
         }
         self.delay_between_requests = 1  # seconds
         self.max_courses_per_department = 50
+        self.current_major = None
+        self.current_student_type = None
     
-    async def fetch_data(self) -> List[Dict[str, Any]]:
+    async def fetch_data(self, major: str = None, student_type: str = None) -> List[Dict[str, Any]]:
         """
         Fetch course catalog data from UTD and other sources.
+        
+        Args:
+            major: Student's major (optional)
+            student_type: Student type - 'graduate' or 'undergraduate' (optional)
         
         Returns:
             List of courses from all sources
         """
-        self.logger.info("Starting course catalog data fetch")
+        self.current_major = major
+        self.current_student_type = student_type
+        
+        self.logger.info(f"Starting course catalog data fetch for major: {major}, type: {student_type}")
         
         all_courses = []
         
@@ -61,22 +136,43 @@ class CourseCatalogAgent(BaseAgent):
             headers=self.headers,
             timeout=aiohttp.ClientTimeout(total=30)
         ) as session:
-            tasks = []
+            # If we have a specific major and student type, fetch from specific URL
+            if major and student_type:
+                major_lower = major.lower()
+                if major_lower in self.major_catalog_mapping:
+                    catalog_url = self.major_catalog_mapping[major_lower].get(student_type.lower())
+                    if catalog_url:
+                        self.logger.info(f"Fetching courses from major-specific URL: {catalog_url}")
+                        try:
+                            async with session.get(catalog_url) as response:
+                                if response.status == 200:
+                                    html = await response.text()
+                                    level_courses = self._parse_utd_courses(html, student_type.lower())
+                                    all_courses.extend(level_courses)
+                                    self.logger.info(f"Fetched {len(level_courses)} courses from {catalog_url}")
+                                else:
+                                    self.logger.warning(f"Failed to fetch courses from {catalog_url}: {response.status}")
+                        except Exception as e:
+                            self.logger.error(f"Error fetching courses from {catalog_url}: {e}")
             
-            # Create tasks for each course site
-            for site_name, site_config in self.course_sites.items():
-                task = self._fetch_courses_from_site(session, site_name, site_config)
-                tasks.append(task)
-            
-            # Execute all tasks concurrently
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-            
-            # Combine results
-            for result in results:
-                if isinstance(result, Exception):
-                    self.logger.error(f"Error fetching courses: {result}")
-                elif isinstance(result, list):
-                    all_courses.extend(result)
+            # Fallback to general catalog if no major-specific courses found
+            if not all_courses:
+                tasks = []
+                
+                # Create tasks for each course site
+                for site_name, site_config in self.course_sites.items():
+                    task = self._fetch_courses_from_site(session, site_name, site_config)
+                    tasks.append(task)
+                
+                # Execute all tasks concurrently
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                # Combine results
+                for result in results:
+                    if isinstance(result, Exception):
+                        self.logger.error(f"Error fetching courses: {result}")
+                    elif isinstance(result, list):
+                        all_courses.extend(result)
         
         self.logger.info(f"Fetched {len(all_courses)} total courses")
         return all_courses
@@ -551,3 +647,38 @@ class CourseCatalogAgent(BaseAgent):
             formatted.append(f"- {level.title()}: {count} courses")
         
         return "\n".join(formatted)
+    
+    async def run(self, user_query: str = None, major: str = None, student_type: str = None) -> str:
+        """
+        Run the complete course catalog agent workflow with context.
+        
+        Args:
+            user_query: Optional user query for context
+            major: Student's major (optional)
+            student_type: Student type - 'graduate' or 'undergraduate' (optional)
+            
+        Returns:
+            Final response from the agent
+        """
+        try:
+            self.logger.info(f"Starting {self.agent_name} workflow")
+            
+            # Fetch data with major and student type context
+            raw_data = await self.fetch_data(major=major, student_type=student_type)
+            if not raw_data:
+                return "Error: No data fetched"
+            
+            # Process data
+            processed_data = self.process_data(raw_data)
+            if not processed_data:
+                return "Error: Data processing failed"
+            
+            # Generate response
+            response = await self.respond(processed_data, user_query)
+            
+            self.logger.info(f"{self.agent_name} workflow completed successfully")
+            return response
+            
+        except Exception as e:
+            self.logger.error(f"{self.agent_name} workflow failed: {e}")
+            return f"Error: {self.agent_name} failed - {str(e)}"
