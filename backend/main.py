@@ -93,14 +93,17 @@ async def get_career_guidance(request: Dict[str, Any]):
     try:
         query = request.get("query")
         session_id = request.get("sessionId")
+        major = request.get("major")
+        student_type = request.get("studentType")
         
         if not query:
             raise HTTPException(status_code=400, detail="Query is required")
         
         logger.info(f"Processing career guidance query: {query[:100]}...")
+        logger.info(f"Context - Major: {major}, Student Type: {student_type}")
         
         # Process the query through the career guidance system
-        response = await career_system.process_query(query, session_id)
+        response = await career_system.process_query(query, session_id, major=major, student_type=student_type)
         
         # Convert response to dictionary for JSON serialization
         response_dict = {
