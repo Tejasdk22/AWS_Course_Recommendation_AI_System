@@ -132,19 +132,19 @@ class CourseCatalogAgent(BaseAgent):
         
         # Major-specific allowed course prefixes
         # Students can only take courses within their major's allowed prefixes
-        # Note: ITSS is undergraduate-level; graduate ITM students use MIS, IMSE, SYSM
+        # Note: ITSS is undergraduate-level; graduate ITM students use MIS, SYSM, ITM
         self.major_allowed_prefixes = {
             'business analytics': ['BUAN', 'MIS', 'OPRE'],
-            'information technology and management': ['MIS', 'IMSE', 'SYSM'],  # Removed ITSS for graduate
+            'information technology and management': ['MIS', 'IMS', 'OPRE', 'FIN', 'ACCT', 'MKT', 'ENTP', 'OB', 'HMGT', 'BPS', 'MECO', 'REAL'],
             'computer science': ['CS', 'SE', 'CE'],
             'software engineering': ['SE', 'CS', 'CE'],
             'electrical engineering': ['EE', 'CE', 'CS'],
             'cybersecurity': ['CS', 'CE'],
-            'management information systems': ['MIS', 'BUAN'],  # Removed ITSS for graduate
+            'management information systems': ['MIS', 'BUAN'],
             'accounting': ['ACCT', 'OPRE'],
             'finance': ['FIN', 'OPRE'],
             'marketing': ['MKT', 'OPRE'],
-            'supply chain management': ['SCM', 'OPRE', 'IMSE'],
+            'supply chain management': ['SCM', 'OPRE', 'SYSM'],
         }
     
     async def fetch_data(self, major: str = None, student_type: str = None) -> List[Dict[str, Any]]:
