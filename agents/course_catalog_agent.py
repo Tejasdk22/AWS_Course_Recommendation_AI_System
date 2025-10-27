@@ -33,12 +33,12 @@ class CourseCatalogAgent(BaseAgent):
             # Graduate programs
             'business analytics': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/business-analytics',
-                'undergraduate': None,
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/business-analytics-ai',
                 'doctoral': None
             },
             'information technology and management': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/information-technology-management',
-                'undergraduate': None,
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/computer-information-systems',
                 'doctoral': None
             },
             'accounting': {
