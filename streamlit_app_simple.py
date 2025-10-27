@@ -99,21 +99,6 @@ def get_mock_response(major, student_type, career_goal):
             "**Customer Segmentation**: Analyze customer behavior patterns using UTD datasets",
             "**A/B Testing Analysis**: Design and analyze business experiments"
         ]
-    elif major == "Data Science":
-        core_courses = [
-            "**CS 4375 - Machine Learning**: Essential for understanding ML algorithms at UTD",
-            "**CS 6313 - Statistical Methods for Data Science**: Foundation in statistical analysis",
-            "**CS 6350 - Big Data Management**: Learn to handle large datasets using UTD's computing resources",
-            "**CS 6360 - Database Design**: Database fundamentals for data storage",
-            "**CS 6363 - Data Mining**: Advanced data mining techniques"
-        ]
-        skills = ["**Python Programming**: Essential for data science using UTD's Python environment", "**SQL**: Database querying and management", "**Statistics**: Statistical analysis and modeling", "**Machine Learning**: Algorithm implementation and tuning", "**Data Visualization**: Creating meaningful charts and graphs"]
-        projects = [
-            "**UTD Data Science Capstone**: Real-world data science project with industry partners",
-            "**Machine Learning Model**: Build a predictive model using scikit-learn and UTD datasets", 
-            "**Data Visualization Dashboard**: Create interactive visualizations using UTD's tools",
-            "**End-to-End Pipeline**: Complete data science project from collection to deployment"
-        ]
     elif major == "Computer Science":
         core_courses = [
             "**CS 4375 - Machine Learning**: Essential for understanding ML algorithms",
@@ -129,20 +114,155 @@ def get_mock_response(major, student_type, career_goal):
             "**Data Visualization Dashboard**: Create interactive visualizations",
             "**End-to-End Pipeline**: Complete data science project from collection to deployment"
         ]
-    elif major == "Information Technology":
+    elif major == "Information Technology and Management":
         core_courses = [
-            "**ITSS 4350 - Data Analytics**: Foundation in data analytics for IT professionals",
-            "**ITSS 4351 - Business Intelligence**: BI tools and techniques",
-            "**ITSS 4352 - Database Systems**: Database management systems",
-            "**ITSS 4353 - Data Mining**: Discover patterns in data using IT tools",
-            "**ITSS 4354 - Big Data Technologies**: Hadoop, Spark, and big data platforms"
+            "**ITSS 6350 - Information Technology Management**: Strategic IT management and planning",
+            "**ITSS 6351 - Business Intelligence**: BI tools and techniques for IT managers",
+            "**ITSS 6352 - Database Systems**: Database management systems for enterprises",
+            "**ITSS 6353 - IT Project Management**: Managing IT projects effectively",
+            "**ITSS 6354 - Cloud Computing**: Cloud technologies and architectures"
         ]
-        skills = ["**Python Programming**: Essential for data analysis", "**SQL**: Database querying and management", "**Statistics**: Statistical analysis and modeling", "**Business Intelligence**: BI tools and dashboards", "**Data Visualization**: Creating meaningful charts and graphs"]
+        skills = ["**IT Strategy**: Strategic IT planning and management", "**Project Management**: IT project lifecycle management", "**Business Analysis**: Translating business needs to IT solutions", "**Cloud Technologies**: AWS, Azure, and cloud platforms", "**Database Management**: Enterprise database systems"]
         projects = [
-            "**IT Capstone Project**: Real-world IT solution development",
-            "**Business Intelligence Dashboard**: Create interactive BI reports", 
-            "**Data Analysis Project**: Analyze business data using IT tools",
-            "**Database Design Project**: Design and implement a database system"
+            "**IT Strategy Capstone**: Develop strategic IT plan for real organization",
+            "**Cloud Migration Project**: Migrate systems to cloud platform", 
+            "**Business Intelligence Implementation**: Implement BI solution for organization",
+            "**IT Governance Project**: Design IT governance framework"
+        ]
+    elif major == "Computer Science":
+        core_courses = [
+            "**CS 5343 - Algorithm Analysis**: Advanced algorithms and complexity",
+            "**CS 5348 - Operating Systems**: OS concepts and implementation",
+            "**CS 5349 - Computer Networks**: Network protocols and architecture",
+            "**CS 5354 - Software Engineering**: Software development lifecycle",
+            "**CS 6363 - Data Mining**: Advanced data mining techniques"
+        ]
+        skills = ["**Java/C++/Python**: Multiple programming languages", "**Data Structures**: Advanced algorithms and data structures", "**System Design**: Large-scale system architecture", "**Software Engineering**: Professional software development", "**Computer Science Fundamentals**: Core CS concepts"]
+        projects = [
+            "**CS Capstone Project**: Real-world software development project",
+            "**System Design Project**: Design and implement distributed system", 
+            "**Algorithm Implementation**: Implement advanced algorithms",
+            "**Open Source Contribution**: Contribute to open source projects"
+        ]
+    elif major == "Software Engineering":
+        core_courses = [
+            "**SE 5353 - Software Project Management**: Managing software projects",
+            "**SE 5354 - Software Testing and Quality Assurance**: Testing methodologies",
+            "**SE 5355 - Software Architecture**: System architecture and design",
+            "**SE 5356 - Agile Development**: Agile and DevOps practices",
+            "**SE 5357 - Software Requirements**: Requirements engineering"
+        ]
+        skills = ["**Software Development**: Full-stack development skills", "**Testing & QA**: Software testing and quality assurance", "**DevOps**: CI/CD pipelines and automation", "**Project Management**: Agile and Scrum methodologies", "**System Design**: Enterprise software architecture"]
+        projects = [
+            "**Software Engineering Capstone**: End-to-end software development project",
+            "**Open Source Project**: Contribute to or create open source software", 
+            "**SaaS Application**: Build and deploy a SaaS application",
+            "**Automated Testing Framework**: Create comprehensive test suites"
+        ]
+    elif major == "Electrical Engineering":
+        core_courses = [
+            "**EE 5358 - Digital Signal Processing**: DSP theory and applications",
+            "**EE 5359 - Communications Systems**: Communication theory",
+            "**EE 5360 - VLSI Design**: VLSI circuit design",
+            "**EE 5361 - Control Systems**: Control theory and applications",
+            "**EE 5362 - Power Systems**: Electric power systems"
+        ]
+        skills = ["**Circuit Design**: Analog and digital circuits", "**Signal Processing**: DSP and communication systems", "**Embedded Systems**: Microcontrollers and embedded programming", "**VLSI Design**: Chip design and layout", "**Power Systems**: Electric power and energy systems"]
+        projects = [
+            "**EE Capstone Project**: Real-world electrical engineering project",
+            "**Embedded System Development**: Design and implement embedded system", 
+            "**Signal Processing Application**: Build DSP-based application",
+            "**Circuit Design Project**: Design and test electronic circuits"
+        ]
+    elif major == "Cybersecurity":
+        core_courses = [
+            "**CS 5363 - Computer Security**: Security principles and practices",
+            "**CS 5364 - Network Security**: Network security protocols",
+            "**CS 5365 - Cryptography**: Cryptographic systems and protocols",
+            "**CS 5366 - Penetration Testing**: Ethical hacking and testing",
+            "**CS 5367 - Security Management**: Security governance and compliance"
+        ]
+        skills = ["**Security Analysis**: Vulnerability assessment and management", "**Cryptography**: Cryptographic protocols and systems", "**Network Security**: Network security protocols and firewalls", "**Penetration Testing**: Ethical hacking and security testing", "**Security Compliance**: Compliance and governance"]
+        projects = [
+            "**Cybersecurity Capstone**: Real-world security analysis project",
+            "**Penetration Testing Project**: Conduct security assessment", 
+            "**Security Tool Development**: Build security analysis tools",
+            "**Compliance Audit**: Design security compliance framework"
+        ]
+    elif major == "Management Information Systems":
+        core_courses = [
+            "**MIS 6340 - IT Strategy**: Strategic IT management",
+            "**MIS 6341 - Business Analytics**: Analytics for business decisions",
+            "**MIS 6342 - ERP Systems**: Enterprise resource planning",
+            "**MIS 6343 - Business Process Management**: Process optimization",
+            "**MIS 6344 - IT Governance**: IT governance and compliance"
+        ]
+        skills = ["**Business Analysis**: Analyzing business needs and IT solutions", "**ERP Systems**: SAP, Oracle, and enterprise systems", "**IT Strategy**: Strategic IT planning", "**Business Process Management**: Process optimization and automation", "**Project Management**: Managing IT projects"]
+        projects = [
+            "**MIS Capstone Project**: Real-world business systems analysis",
+            "**ERP Implementation**: Design ERP implementation plan", 
+            "**Business Process Redesign**: Optimize business processes",
+            "**IT Strategy Project**: Develop strategic IT roadmap"
+        ]
+    elif major == "Accounting":
+        core_courses = [
+            "**ACCT 6320 - Financial Reporting**: Advanced financial reporting",
+            "**ACCT 6321 - Managerial Accounting**: Cost analysis and budgeting",
+            "**ACCT 6322 - Auditing**: Audit procedures and standards",
+            "**ACCT 6323 - Taxation**: Tax law and compliance",
+            "**ACCT 6324 - Accounting Information Systems**: AIS design"
+        ]
+        skills = ["**Financial Analysis**: Financial statements and analysis", "**Tax Planning**: Tax law and compliance", "**Auditing**: Audit procedures and controls", "**Cost Accounting**: Cost analysis and budgeting", "**Accounting Systems**: ERP and accounting systems"]
+        projects = [
+            "**Accounting Capstone**: Real-world accounting analysis project",
+            "**Financial Analysis Project**: Analyze company financials", 
+            "**Audit Project**: Conduct audit procedures",
+            "**Tax Planning Project**: Develop tax strategy"
+        ]
+    elif major == "Finance":
+        core_courses = [
+            "**FIN 6301 - Financial Theory**: Corporate finance theory",
+            "**FIN 6302 - Investment Analysis**: Security analysis and portfolio management",
+            "**FIN 6303 - Derivative Securities**: Options and futures",
+            "**FIN 6304 - Financial Markets**: Market structure and trading",
+            "**FIN 6305 - International Finance**: Global financial markets"
+        ]
+        skills = ["**Financial Modeling**: Excel and financial models", "**Investment Analysis**: Security valuation and portfolio management", "**Risk Management**: Financial risk assessment", "**Derivatives**: Options, futures, and swaps", "**Financial Markets**: Market structure and trading"]
+        projects = [
+            "**Finance Capstone**: Real-world financial analysis project",
+            "**Portfolio Management**: Build and manage investment portfolio", 
+            "**Financial Modeling**: Build comprehensive financial models",
+            "**Risk Analysis**: Conduct financial risk assessment"
+        ]
+    elif major == "Marketing":
+        core_courses = [
+            "**MKT 6300 - Marketing Strategy**: Strategic marketing planning",
+            "**MKT 6301 - Consumer Behavior**: Consumer psychology and behavior",
+            "**MKT 6302 - Digital Marketing**: Online marketing strategies",
+            "**MKT 6303 - Brand Management**: Brand strategy and positioning",
+            "**MKT 6304 - Marketing Analytics**: Marketing data and analytics"
+        ]
+        skills = ["**Marketing Strategy**: Strategic marketing planning", "**Digital Marketing**: Online marketing channels", "**Marketing Analytics**: Data-driven marketing decisions", "**Brand Management**: Brand strategy and development", "**Consumer Insights**: Understanding consumer behavior"]
+        projects = [
+            "**Marketing Capstone**: Real-world marketing campaign",
+            "**Digital Marketing Project**: Launch online marketing campaign", 
+            "**Brand Development**: Develop brand strategy and positioning",
+            "**Market Research Project**: Conduct comprehensive market research"
+        ]
+    elif major == "Supply Chain Management":
+        core_courses = [
+            "**SCM 6300 - Supply Chain Strategy**: Strategic SCM",
+            "**SCM 6301 - Operations Management**: Production and operations",
+            "**SCM 6302 - Logistics and Distribution**: Logistics management",
+            "**SCM 6303 - Procurement and Sourcing**: Procurement strategies",
+            "**SCM 6304 - Supply Chain Analytics**: Analytics in SCM"
+        ]
+        skills = ["**Supply Chain Strategy**: Strategic SCM planning", "**Operations Management**: Production optimization", "**Logistics**: Distribution and warehouse management", "**Procurement**: Strategic sourcing and vendor management", "**Supply Chain Analytics**: Data-driven SCM decisions"]
+        projects = [
+            "**SCM Capstone**: Real-world supply chain optimization project",
+            "**Logistics Design**: Optimize logistics network", 
+            "**Procurement Strategy**: Develop sourcing strategy",
+            "**Supply Chain Analytics**: Analyze and optimize supply chain"
         ]
     elif major == "Mathematics":
         core_courses = [
@@ -287,7 +407,19 @@ def main():
         
         major = st.selectbox(
             "Your Major",
-            ["Business Analytics", "Data Science", "Computer Science", "Information Technology", "Mathematics", "Statistics", "Engineering", "Business", "Economics", "Finance"],
+            [
+                "Business Analytics",
+                "Information Technology and Management", 
+                "Computer Science",
+                "Software Engineering",
+                "Electrical Engineering",
+                "Cybersecurity",
+                "Management Information Systems",
+                "Accounting",
+                "Finance",
+                "Marketing",
+                "Supply Chain Management"
+            ],
             index=0
         )
         
