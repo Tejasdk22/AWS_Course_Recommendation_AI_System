@@ -32,63 +32,78 @@ class CourseCatalogAgent(BaseAgent):
             # Graduate programs
             'business analytics': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/business-analytics',
-                'undergraduate': None
+                'undergraduate': None,
+                'doctoral': None
             },
             'information technology and management': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/information-technology-management',
-                'undergraduate': None
+                'undergraduate': None,
+                'doctoral': None
             },
             'accounting': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/accounting',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/accounting'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/accounting',
+                'doctoral': None
             },
             'finance': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/finance',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/finance'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/finance',
+                'doctoral': None
             },
             'marketing': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/marketing',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/marketing'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/marketing',
+                'doctoral': None
             },
             'supply chain management': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/supply-chain-management',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/supply-chain-management'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/supply-chain-management',
+                'doctoral': None
             },
             'management information systems': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/jsom/information-systems',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/information-systems'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/jsom/information-systems',
+                'doctoral': None
             },
             'computer science': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/computer-science',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/computer-science'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/computer-science',
+                'doctoral': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/computer-science'
             },
             'software engineering': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/software-engineering',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/software-engineering'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/software-engineering',
+                'doctoral': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/software-engineering'
             },
             'electrical engineering': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/electrical-engineering',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/electrical-engineering'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/electrical-engineering',
+                'doctoral': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/electrical-engineering'
             },
             'cybersecurity': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/ecs/cybersecurity',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/cybersecurity'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/ecs/cybersecurity',
+                'doctoral': None
             },
             'data science': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/data-science-statistics',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/data-science'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/data-science',
+                'doctoral': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/data-science-statistics'
             },
             'data science and statistics': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/data-science-statistics',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/data-science'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/data-science',
+                'doctoral': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/data-science-statistics'
             },
             'mathematics': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/mathematics',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/mathematics'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/mathematics',
+                'doctoral': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/mathematics'
             },
             'statistics': {
                 'graduate': 'https://catalog.utdallas.edu/2025/graduate/programs/nsm/statistics',
-                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/statistics'
+                'undergraduate': 'https://catalog.utdallas.edu/2025/undergraduate/programs/nsm/statistics',
+                'doctoral': None
             }
         }
         

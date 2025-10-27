@@ -425,13 +425,34 @@ def main():
         
         student_type = st.selectbox(
             "Student Type",
-            ["Undergraduate", "Graduate"],
+            ["Undergraduate", "Graduate", "Doctoral"],
             index=1
         )
         
         career_goal = st.selectbox(
             "Career Goal",
-            ["Data Scientist", "Data Engineer", "Data Analyst", "ML Engineer", "Software Engineer", "Product Manager"],
+            [
+                # Data & Analytics Roles
+                "Data Scientist", "Data Engineer", "Data Analyst", "ML Engineer", 
+                "Business Analyst", "Business Intelligence Analyst", "Analytics Consultant",
+                
+                # Software & Engineering Roles
+                "Software Engineer", "Full Stack Developer", "DevOps Engineer", "Cloud Architect",
+                
+                # IT & Management Roles
+                "IT Manager", "IT Director", "Technology Consultant", "Systems Architect",
+                "Cybersecurity Engineer", "Security Analyst", "Security Architect",
+                
+                # Business & Management Roles
+                "Product Manager", "Project Manager", "Business Consultant", "Operations Manager",
+                "Supply Chain Manager", "Procurement Manager",
+                
+                # Finance & Accounting Roles
+                "Financial Analyst", "Investment Analyst", "Corporate Accountant", "Auditor",
+                
+                # Marketing Roles
+                "Marketing Manager", "Digital Marketing Specialist", "Brand Manager", "Marketing Analyst"
+            ],
             index=0
         )
         
