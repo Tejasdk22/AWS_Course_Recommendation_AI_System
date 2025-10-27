@@ -128,6 +128,22 @@ class CourseCatalogAgent(BaseAgent):
         self.max_courses_per_department = 50
         self.current_major = None
         self.current_student_type = None
+        
+        # Major-specific allowed course prefixes
+        # Students can only take courses within their major's allowed prefixes
+        self.major_allowed_prefixes = {
+            'business analytics': ['BUAN', 'MIS', 'OPRE'],
+            'information technology and management': ['ITSS', 'MIS', 'IMSE', 'SYSM'],
+            'computer science': ['CS', 'SE', 'CE'],
+            'software engineering': ['SE', 'CS', 'CE'],
+            'electrical engineering': ['EE', 'CE', 'CS'],
+            'cybersecurity': ['CS', 'CE'],
+            'management information systems': ['MIS', 'BUAN', 'ITSS'],
+            'accounting': ['ACCT', 'OPRE'],
+            'finance': ['FIN', 'OPRE'],
+            'marketing': ['MKT', 'OPRE'],
+            'supply chain management': ['SCM', 'OPRE', 'IMSE'],
+        }
     
     async def fetch_data(self, major: str = None, student_type: str = None) -> List[Dict[str, Any]]:
         """
@@ -477,6 +493,41 @@ class CourseCatalogAgent(BaseAgent):
         
         return list(set(found_skills))  # Remove duplicates
     
+    def _filter_courses_by_prefix(self, courses: List[Dict[str, Any]], major: str = None) -> List[Dict[str, Any]]:
+        """
+        Filter courses to only include those with allowed prefixes for the major.
+        
+        Args:
+            courses: List of course dictionaries
+            major: Student's major (optional)
+            
+        Returns:
+            Filtered list of courses
+        """
+        if not major or not courses:
+            return courses
+        
+        major_lower = major.lower()
+        allowed_prefixes = self.major_allowed_prefixes.get(major_lower, [])
+        
+        if not allowed_prefixes:
+            # If no specific prefixes defined, return all courses
+            return courses
+        
+        filtered_courses = []
+        for course in courses:
+            course_code = course.get('course_code', '')
+            # Extract prefix (first part before space or number)
+            prefix_match = course_code.split()[0] if ' ' in course_code else course_code[:4]
+            
+            if any(allowed.upper() == prefix_match.upper() for allowed in allowed_prefixes):
+                filtered_courses.append(course)
+            else:
+                self.logger.debug(f"Filtering out course {course_code} - not in allowed prefixes for {major}")
+        
+        self.logger.info(f"Filtered {len(courses)} courses to {len(filtered_courses)} for major {major}")
+        return filtered_courses
+    
     def process_data(self, data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Process and analyze course catalog data.
@@ -488,6 +539,10 @@ class CourseCatalogAgent(BaseAgent):
             Processed course catalog analysis
         """
         self.logger.info(f"Processing {len(data)} courses")
+        
+        # Filter courses based on major's allowed prefixes
+        if self.current_major:
+            data = self._filter_courses_by_prefix(data, self.current_major)
         
         if not data:
             return {
