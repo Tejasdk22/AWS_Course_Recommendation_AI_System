@@ -132,14 +132,15 @@ class CourseCatalogAgent(BaseAgent):
         
         # Major-specific allowed course prefixes
         # Students can only take courses within their major's allowed prefixes
+        # Note: ITSS is undergraduate-level; graduate ITM students use MIS, IMSE, SYSM
         self.major_allowed_prefixes = {
             'business analytics': ['BUAN', 'MIS', 'OPRE'],
-            'information technology and management': ['ITSS', 'MIS', 'IMSE', 'SYSM'],
+            'information technology and management': ['MIS', 'IMSE', 'SYSM'],  # Removed ITSS for graduate
             'computer science': ['CS', 'SE', 'CE'],
             'software engineering': ['SE', 'CS', 'CE'],
             'electrical engineering': ['EE', 'CE', 'CS'],
             'cybersecurity': ['CS', 'CE'],
-            'management information systems': ['MIS', 'BUAN', 'ITSS'],
+            'management information systems': ['MIS', 'BUAN'],  # Removed ITSS for graduate
             'accounting': ['ACCT', 'OPRE'],
             'finance': ['FIN', 'OPRE'],
             'marketing': ['MKT', 'OPRE'],
@@ -535,6 +536,52 @@ class CourseCatalogAgent(BaseAgent):
         self.logger.info(f"Filtered {len(courses)} courses to {len(filtered_courses)} for major {major} (allowed prefixes: {allowed_prefixes})")
         return filtered_courses
     
+    def _filter_courses_by_level(self, courses: List[Dict[str, Any]], student_type: str) -> List[Dict[str, Any]]:
+        """
+        Filter courses to only include courses appropriate for the student type.
+        
+        Args:
+            courses: List of course dictionaries
+            student_type: Student type (undergraduate/graduate/doctoral)
+            
+        Returns:
+            Filtered list of courses by level
+        """
+        if not student_type or not courses:
+            return courses
+        
+        student_type_lower = student_type.lower()
+        filtered_courses = []
+        
+        for course in courses:
+            course_level = course.get('level', '').lower()
+            
+            # Check if course level matches student type
+            if student_type_lower == 'undergraduate':
+                # Undergraduate students can only see undergraduate courses
+                if course_level in ['undergraduate', 'both', '']:
+                    filtered_courses.append(course)
+                else:
+                    self.logger.debug(f"Filtering out {course.get('course_code')} - level '{course_level}' not for undergraduate")
+            elif student_type_lower == 'graduate':
+                # Graduate students can only see graduate courses
+                if course_level in ['graduate', 'both', '']:
+                    filtered_courses.append(course)
+                else:
+                    self.logger.debug(f"Filtering out {course.get('course_code')} - level '{course_level}' not for graduate")
+            elif student_type_lower == 'doctoral':
+                # Doctoral students can see graduate and doctoral courses
+                if course_level in ['doctoral', 'graduate', 'both', '']:
+                    filtered_courses.append(course)
+                else:
+                    self.logger.debug(f"Filtering out {course.get('course_code')} - level '{course_level}' not for doctoral")
+            else:
+                # Unknown student type, include all courses
+                filtered_courses.append(course)
+        
+        self.logger.info(f"Filtered {len(courses)} courses to {len(filtered_courses)} for student type {student_type}")
+        return filtered_courses
+    
     def process_data(self, data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Process and analyze course catalog data.
@@ -547,9 +594,13 @@ class CourseCatalogAgent(BaseAgent):
         """
         self.logger.info(f"Processing {len(data)} courses")
         
-        # Filter courses based on major's allowed prefixes
+        # Filter courses based on major's allowed prefixes and student type
         if self.current_major:
             data = self._filter_courses_by_prefix(data, self.current_major)
+        
+        # Filter by student type level (undergraduate vs graduate vs doctoral)
+        if self.current_student_type:
+            data = self._filter_courses_by_level(data, self.current_student_type)
         
         if not data:
             return {
