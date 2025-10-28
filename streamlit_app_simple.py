@@ -353,7 +353,7 @@ As a {major} {student_type} student at UTD, you're on the right path to becoming
 
 ## Next Steps at UTD
 1. **Enroll in recommended courses**: Use UTD's course registration system
-2. **Join UTD organizations**: Data Science Society, Analytics Club, or Business Analytics Association
+2. **Join UTD organizations**: AI BIZ Club, Data Science Society, Analytics Club, or Business Analytics Association
 3. **Connect with UTD faculty**: Reach out to professors in your field of interest
 4. **Apply for UTD research opportunities**: Work with faculty on research projects
 5. **Attend UTD career fairs**: Network with companies recruiting at UTD
