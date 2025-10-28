@@ -6,6 +6,10 @@ from datetime import datetime
 import boto3
 from botocore.exceptions import ClientError
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Page configuration
 st.set_page_config(
