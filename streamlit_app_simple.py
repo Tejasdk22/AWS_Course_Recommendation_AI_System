@@ -389,6 +389,26 @@ def get_bedrock_client():
 def generate_chatbot_response(question, data, query_info):
     """Generate chatbot response using AWS Bedrock"""
     
+    # Check if asking about professors
+    lower_question = question.lower()
+    if "professor" in lower_question or "faculty" in lower_question or "instructor" in lower_question or "teaching" in lower_question:
+        return """I don't have access to current instructor schedules for specific courses. Here's how to find this information:
+
+📅 **UTD Course Schedule**
+• Visit: https://coursebook.utdallas.edu/
+• Search by course code (e.g., BUAN 6345)
+• View current semester offerings and assigned instructors
+
+📧 **Alternative Methods**
+• Check the UTD Academic Catalog for course coordinators
+• Contact your academic advisor for faculty recommendations
+• Visit department websites for faculty directory
+• Email department admins for current semester instructors
+
+💡 **Tip**: Instructor assignments often change each semester, so checking the current schedule is the most accurate method.
+
+Would you like help with course prerequisites, scheduling, or registration instead?"""
+    
     context = f"""
 You are a helpful UTD course advisor chatbot. A {query_info['student_type']} student in {query_info['major']} 
 wants to become a {query_info['career_goal']}. Here are their course recommendations:
