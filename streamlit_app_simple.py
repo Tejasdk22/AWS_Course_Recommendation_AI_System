@@ -102,7 +102,7 @@ def call_real_api(major, student_type, career_goal):
                 "studentType": student_type,
                 "careerGoal": career_goal
             },
-            timeout=60  # Increased timeout for real data processing
+            timeout=90  # Increased timeout for real data processing (web scraping takes time)
         )
         
         if response.status_code == 200:
@@ -600,11 +600,11 @@ def main():
         
         if st.button("Get Course Recommendations", type="primary", use_container_width=True):
             # Show loading
-            with st.spinner("🤖 AI is analyzing your academic path..."):
+            with st.spinner("🤖 AI is analyzing your academic path... This may take 60-90 seconds for real data..."):
                 # Try real API first, fallback to mock data
                 result = call_real_api(major, student_type, career_goal)
                 
-                # If API failed, use mock data
+                # If API failed or timed out, use mock data
                 if result is None:
                     result = get_mock_response(major, student_type, career_goal)
             
