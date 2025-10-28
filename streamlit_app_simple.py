@@ -312,7 +312,7 @@ def get_mock_response(major, student_type, career_goal):
     return {
         "query": f"I am a {major} {student_type} student at UTD. I want to become a {career_goal}. What courses should I take?",
         "unified_response": f"""
-# Career Guidance for {career_goal}
+# Course Recommendations for {career_goal}
 
 ## Overview
 As a {major} {student_type} student at UTD, you're on the right path to becoming a {career_goal}. Here's a comprehensive guide to help you achieve your career goals.
@@ -364,9 +364,51 @@ Good luck with your journey to becoming a {career_goal}!
         "timestamp": datetime.now().isoformat()
     }
 
+def generate_chatbot_response(question, data, query_info):
+    """Generate chatbot response based on recommendations"""
+    
+    context = f"""
+    You are a helpful UTD course advisor chatbot. A {query_info['student_type']} student in {query_info['major']} 
+    wants to become a {query_info['career_goal']}. Here are their course recommendations:
+    
+    {data['unified_response']}
+    
+    Answer their question: {question}
+    
+    Be concise, helpful, and specific to UTD courses and requirements. If you don't know something specific, 
+    suggest they consult with their academic advisor.
+    """
+    
+    # Simple response generator (can be enhanced with Bedrock API call)
+    lower_question = question.lower()
+    
+    if "credits" in lower_question or "hours" in lower_question:
+        return """For graduate students, most masters programs require **33-36 credit hours**. Undergraduate students typically need **120-130 credit hours** to graduate. The exact number depends on your major and any transfer credits you may have."""
+    
+    elif "prerequisite" in lower_question or "pre-requisite" in lower_question:
+        return """Prerequisites vary by course. Please check the UTD course catalog or consult with your academic advisor to verify specific prerequisites for the courses you're interested in."""
+    
+    elif "when" in lower_question or "timeline" in lower_question or "schedule" in lower_question:
+        return """Most graduate programs can be completed in 1.5-2 years full-time or 2.5-3 years part-time. For undergraduates, the typical timeline is 4 years. I recommend creating a semester-by-semester plan with your academic advisor."""
+    
+    elif "elective" in lower_question or "choose" in lower_question:
+        return """Elective courses should align with your career goal and complement your core coursework. Focus on electives that build skills needed for your target role. Check with your academic advisor for approved elective lists for your program."""
+    
+    elif "help" in lower_question or "support" in lower_question:
+        return """UTD offers many resources:\n• Academic Advising Office\n• Career Center\n• Department advisors\n• Student Success Center\n• Study groups and tutoring\n\nI recommend reaching out to your department's graduate academic advisor for personalized guidance."""
+    
+    else:
+        return f"""Based on your {query_info['major']} profile and goal to become a {query_info['career_goal']}, I'd be happy to help! 
+        
+Your course recommendations include both core and elective courses tailored to your career path. 
+If you have specific questions about course content, prerequisites, or scheduling, 
+I recommend consulting with your UTD academic advisor for the most accurate and up-to-date information.
+
+Is there a specific course or topic you'd like me to elaborate on?"""
+
 def display_recommendations(data):
     """Display recommendations in a nice format"""
-    st.markdown("### 🎯 Career Guidance Response")
+    st.markdown("### 🎯 Course Recommendation Response")
     st.markdown(data['unified_response'])
     
     st.markdown("---")
@@ -495,6 +537,37 @@ def main():
         
         # Display recommendations
         display_recommendations(data)
+        
+        # Chatbot section
+        st.markdown("---")
+        st.markdown("### 💬 Have Questions About Your Recommendations?")
+        st.markdown("Ask me anything about the courses, requirements, or career path!")
+        
+        # Initialize chat history
+        if 'chat_history' not in st.session_state:
+            st.session_state.chat_history = []
+        
+        # Display chat history
+        chat_container = st.container()
+        with chat_container:
+            for i, message in enumerate(st.session_state.chat_history):
+                with st.chat_message(message["role"]):
+                    st.write(message["content"])
+        
+        # Chat input
+        user_question = st.chat_input("Ask a question about your course recommendations...")
+        
+        if user_question:
+            # Add user message to chat history
+            st.session_state.chat_history.append({"role": "user", "content": user_question})
+            
+            # Generate AI response
+            with st.spinner("Thinking..."):
+                ai_response = generate_chatbot_response(user_question, data, query_info)
+                st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
+            
+            # Rerun to display new messages
+            st.rerun()
         
     else:
         # Welcome message
