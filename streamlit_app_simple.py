@@ -92,12 +92,14 @@ def get_mock_response(major, student_type, career_goal):
     # Customize recommendations based on major - UTD specific
     if major == "Business Analytics":
         core_courses = [
-            "**BUAN 6345 (MIS 6345) - SAP Analytics**: In-memory business intelligence tools and databases using SAP",
-            "**BUAN 6346 (MIS 6346) - Big Data**: Big data concepts, manipulation with popular tools, and distributed analytics programming", 
-            "**BUAN 6356 (MIS 6356) - Business Analytics with R**: Extracting business intelligence from data for customer segmentation and recommendation systems",
-            "**BUAN 6350 - Data Mining**: Discover patterns in business data using UTD's analytics tools",
-            "**BUAN 6351 - Statistical Methods**: Advanced statistical analysis for business applications",
-            "**BUAN 6352 - Predictive Analytics**: Advanced predictive modeling techniques for business applications"
+            "**BUAN 6312 - Applied Econometrics and Time Series Analysis**: Advanced statistical methods for business forecasting",
+            "**BUAN 6320 - Database Foundations for Business Analytics**: Database design and management for analytics",
+            "**BUAN 6324 - Business Analytics With SAS**: Data analysis and modeling using SAS", 
+            "**BUAN 6356 - Business Analytics With R**: Extracting business intelligence from data for customer segmentation and recommendation systems",
+            "**BUAN 6383 - Modeling for Business Analytics**: Predictive and prescriptive modeling techniques",
+            "**BUAN 6337 - Predictive Analytics for Data Science**: Advanced predictive modeling for business decisions",
+            "**BUAN 6398 - Prescriptive Analytics**: Optimization and decision analysis",
+            "**BUAN 63591 - Advanced Statistics for Data Science**: Statistical methods for data science applications"
         ]
         skills = ["**Excel & SQL**: Essential for business data analysis", "**Python/R**: Statistical programming with UTD's computing resources", "**Tableau/Power BI**: Business intelligence tools", "**Statistics**: Statistical modeling and forecasting", "**Business Acumen**: Understanding business processes"]
         projects = [
@@ -345,11 +347,11 @@ As a {major} {student_type} student at UTD, you're on the right path to becoming
 {chr(10).join([f"1. {project}" for project in projects])}
 
 ## UTD Academic Timeline
-- **Fall Semester**: Focus on core analytics courses (BUAN 6345, BUAN 6350)
-- **Spring Semester**: Take advanced analytics and database courses (BUAN 6356, MIS 6320)
+- **Fall Semester**: Focus on core analytics courses (BUAN 6312, BUAN 6320)
+- **Spring Semester**: Take advanced analytics and database courses (BUAN 6356, BUAN 6324)
 - **Summer**: Internship or research project with UTD faculty
-- **Fall Semester**: Advanced topics and electives (BUAN 6352, BUAN 6335)
-- **Spring Semester**: Capstone project and specialization (BUAN Capstone, MIS 6321)
+- **Fall Semester**: Advanced topics and electives (BUAN 6337, BUAN 6398)
+- **Spring Semester**: Capstone project and specialization (BUAN 6383, BUAN 63591)
 
 ## Next Steps at UTD
 1. **Enroll in recommended courses**: Use UTD's course registration system
