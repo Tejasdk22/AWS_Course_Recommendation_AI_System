@@ -330,7 +330,7 @@ As a {major} {student_type} student at UTD, you're on the right path to becoming
 {chr(10).join([f"- {course}" for course in core_courses])}
 
 ### Elective Courses
-- **BUAN 6353 - Business Intelligence**: BI tools and dashboard development
+- **BUAN 6335 - Organizing for BA platforms**: Organizing for Business Analytics platforms
 - **BUAN 6354 - Advanced Analytics**: Advanced analytical techniques
 - **MIS 6320 - Database Management**: Database design and management systems
 - **MIS 6321 - Data Warehousing**: Data warehouse design and implementation
@@ -348,7 +348,7 @@ As a {major} {student_type} student at UTD, you're on the right path to becoming
 - **Fall Semester**: Focus on core analytics courses (BUAN 6345, BUAN 6350)
 - **Spring Semester**: Take advanced analytics and database courses (BUAN 6356, MIS 6320)
 - **Summer**: Internship or research project with UTD faculty
-- **Fall Semester**: Advanced topics and electives (BUAN 6352, BUAN 6353)
+- **Fall Semester**: Advanced topics and electives (BUAN 6352, BUAN 6335)
 - **Spring Semester**: Capstone project and specialization (BUAN Capstone, MIS 6321)
 
 ## Next Steps at UTD
