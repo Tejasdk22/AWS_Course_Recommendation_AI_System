@@ -517,6 +517,52 @@ def main():
                 'student_type': student_type,
                 'career_goal': career_goal
             }
+        
+        # Show chatbot in sidebar only when recommendations are available
+        if 'recommendations' in st.session_state:
+            st.markdown("---")
+            st.markdown("### 💬 Course Advisor Chat")
+            st.markdown("Ask me anything about your recommendations!")
+            
+            # Initialize chat history
+            if 'chat_history' not in st.session_state:
+                st.session_state.chat_history = []
+            
+            # Display chat history in a scrollable container
+            if st.session_state.chat_history:
+                chat_height = "200px"
+                chat_html = "<div style='border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; height: " + chat_height + "; overflow-y: auto; background-color: #f9f9f9;'>"
+                for message in st.session_state.chat_history:
+                    if message["role"] == "user":
+                        chat_html += f"<div style='text-align: right; margin-bottom: 10px;'><div style='background-color: #0084ff; color: white; padding: 8px 12px; border-radius: 12px; display: inline-block; max-width: 85%; font-size: 0.85rem;'>{message['content']}</div></div>"
+                    else:
+                        chat_html += f"<div style='text-align: left; margin-bottom: 10px;'><div style='background-color: #e4e6eb; color: black; padding: 8px 12px; border-radius: 12px; display: inline-block; max-width: 85%; font-size: 0.85rem;'>{message['content']}</div></div>"
+                chat_html += "</div>"
+                st.markdown(chat_html, unsafe_allow_html=True)
+            else:
+                st.info("👋 Ask a question about your course recommendations!")
+            
+            # Text input for new questions
+            user_question = st.text_input("Ask a question...", key="chat_input")
+            
+            ask_button = st.button("Ask", type="primary", use_container_width=True)
+            
+            if st.button("Clear Chat", use_container_width=True):
+                st.session_state.chat_history = []
+                st.experimental_rerun()
+            
+            # Handle question submission
+            if ask_button and user_question:
+                # Add user message to chat history
+                st.session_state.chat_history.append({"role": "user", "content": user_question})
+                
+                # Generate AI response
+                with st.spinner("Thinking..."):
+                    ai_response = generate_chatbot_response(user_question, st.session_state['recommendations'], st.session_state['query_info'])
+                    st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
+                
+                # Clear input and rerun
+                st.experimental_rerun()
     
     # Main content area
     if 'recommendations' in st.session_state:
@@ -537,52 +583,6 @@ def main():
         
         # Display recommendations
         display_recommendations(data)
-        
-        # Show chatbot in the main area (as an expandable section)
-        with st.expander("💬 Chat with Course Advisor", expanded=False):
-            st.markdown("Ask me anything about your course recommendations!")
-            
-            # Initialize chat history
-            if 'chat_history' not in st.session_state:
-                st.session_state.chat_history = []
-            
-            # Display chat history in a scrollable container
-            if st.session_state.chat_history:
-                chat_height = "300px"
-                chat_html = "<div style='border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; height: " + chat_height + "; overflow-y: auto; background-color: #f9f9f9;'>"
-                for message in st.session_state.chat_history:
-                    if message["role"] == "user":
-                        chat_html += f"<div style='text-align: right; margin-bottom: 10px;'><div style='background-color: #0084ff; color: white; padding: 8px 12px; border-radius: 12px; display: inline-block; max-width: 70%;'>{message['content']}</div></div>"
-                    else:
-                        chat_html += f"<div style='text-align: left; margin-bottom: 10px;'><div style='background-color: #e4e6eb; color: black; padding: 8px 12px; border-radius: 12px; display: inline-block; max-width: 70%;'>{message['content']}</div></div>"
-                chat_html += "</div>"
-                st.markdown(chat_html, unsafe_allow_html=True)
-            else:
-                st.info("👋 Start by asking a question about your course recommendations!")
-            
-            # Text input for new questions
-            user_question = st.text_input("Ask a question...", key="chat_input")
-            
-            col1, col2 = st.columns([1, 4])
-            with col1:
-                ask_button = st.button("Ask", type="primary")
-            with col2:
-                if st.button("Clear Chat"):
-                    st.session_state.chat_history = []
-                    st.rerun()
-            
-            # Handle question submission
-            if ask_button and user_question:
-                # Add user message to chat history
-                st.session_state.chat_history.append({"role": "user", "content": user_question})
-                
-                # Generate AI response
-                with st.spinner("Thinking..."):
-                    ai_response = generate_chatbot_response(user_question, data, query_info)
-                    st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
-                
-                # Clear input and rerun
-                st.rerun()
         
     else:
         # Welcome message
