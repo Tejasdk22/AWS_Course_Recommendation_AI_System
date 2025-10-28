@@ -86,6 +86,34 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# API Configuration
+API_ENDPOINT = os.getenv('API_ENDPOINT', 'http://localhost:8000')
+
+def call_real_api(major, student_type, career_goal):
+    """Call the real backend API for course recommendations"""
+    try:
+        query = f"I am a {major} {student_type} student at UTD. I want to become a {career_goal}. What courses should I take?"
+        
+        response = requests.post(
+            f"{API_ENDPOINT}/api/career-guidance",
+            json={
+                "query": query,
+                "major": major,
+                "studentType": student_type,
+                "careerGoal": career_goal
+            },
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"API Error: {response.status_code}")
+            return None
+    except requests.exceptions.RequestException as e:
+        st.warning(f"Could not connect to backend API: {e}. Using mock data for demonstration.")
+        return None
+
 def get_mock_response(major, student_type, career_goal):
     """Generate a mock response for demonstration"""
     
@@ -573,11 +601,12 @@ def main():
         if st.button("Get Course Recommendations", type="primary", use_container_width=True):
             # Show loading
             with st.spinner("🤖 AI is analyzing your academic path..."):
-                # Simulate processing time
-                time.sleep(2)
+                # Try real API first, fallback to mock data
+                result = call_real_api(major, student_type, career_goal)
                 
-                # Get mock response
-                result = get_mock_response(major, student_type, career_goal)
+                # If API failed, use mock data
+                if result is None:
+                    result = get_mock_response(major, student_type, career_goal)
             
             st.success("✅ Course recommendations generated successfully!")
             st.session_state['recommendations'] = result
