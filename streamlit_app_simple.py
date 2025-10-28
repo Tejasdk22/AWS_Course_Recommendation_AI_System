@@ -102,7 +102,7 @@ def call_real_api(major, student_type, career_goal):
                 "studentType": student_type,
                 "careerGoal": career_goal
             },
-            timeout=30
+            timeout=60  # Increased timeout for real data processing
         )
         
         if response.status_code == 200:
