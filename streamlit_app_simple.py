@@ -3,6 +3,9 @@ import requests
 import json
 import time
 from datetime import datetime
+import boto3
+from botocore.exceptions import ClientError
+import os
 
 # Page configuration
 st.set_page_config(
@@ -364,47 +367,64 @@ Good luck with your journey to becoming a {career_goal}!
         "timestamp": datetime.now().isoformat()
     }
 
+@st.cache_resource
+def get_bedrock_client():
+    """Initialize AWS Bedrock client"""
+    try:
+        region = os.getenv('AWS_DEFAULT_REGION', 'us-east-1')
+        return boto3.client(
+            'bedrock-runtime',
+            region_name=region,
+            aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
+        )
+    except Exception as e:
+        st.error(f"Failed to initialize Bedrock client: {e}")
+        return None
+
 def generate_chatbot_response(question, data, query_info):
-    """Generate chatbot response based on recommendations"""
+    """Generate chatbot response using AWS Bedrock"""
     
     context = f"""
-    You are a helpful UTD course advisor chatbot. A {query_info['student_type']} student in {query_info['major']} 
-    wants to become a {query_info['career_goal']}. Here are their course recommendations:
-    
-    {data['unified_response']}
-    
-    Answer their question: {question}
-    
-    Be concise, helpful, and specific to UTD courses and requirements. If you don't know something specific, 
-    suggest they consult with their academic advisor.
-    """
-    
-    # Simple response generator (can be enhanced with Bedrock API call)
-    lower_question = question.lower()
-    
-    if "credits" in lower_question or "hours" in lower_question:
-        return """For graduate students, most masters programs require **33-36 credit hours**. Undergraduate students typically need **120-130 credit hours** to graduate. The exact number depends on your major and any transfer credits you may have."""
-    
-    elif "prerequisite" in lower_question or "pre-requisite" in lower_question:
-        return """Prerequisites vary by course. Please check the UTD course catalog or consult with your academic advisor to verify specific prerequisites for the courses you're interested in."""
-    
-    elif "when" in lower_question or "timeline" in lower_question or "schedule" in lower_question:
-        return """Most graduate programs can be completed in 1.5-2 years full-time or 2.5-3 years part-time. For undergraduates, the typical timeline is 4 years. I recommend creating a semester-by-semester plan with your academic advisor."""
-    
-    elif "elective" in lower_question or "choose" in lower_question:
-        return """Elective courses should align with your career goal and complement your core coursework. Focus on electives that build skills needed for your target role. Check with your academic advisor for approved elective lists for your program."""
-    
-    elif "help" in lower_question or "support" in lower_question:
-        return """UTD offers many resources:\n• Academic Advising Office\n• Career Center\n• Department advisors\n• Student Success Center\n• Study groups and tutoring\n\nI recommend reaching out to your department's graduate academic advisor for personalized guidance."""
-    
-    else:
-        return f"""Based on your {query_info['major']} profile and goal to become a {query_info['career_goal']}, I'd be happy to help! 
-        
-Your course recommendations include both core and elective courses tailored to your career path. 
-If you have specific questions about course content, prerequisites, or scheduling, 
-I recommend consulting with your UTD academic advisor for the most accurate and up-to-date information.
+You are a helpful UTD course advisor chatbot. A {query_info['student_type']} student in {query_info['major']} 
+wants to become a {query_info['career_goal']}. Here are their course recommendations:
 
-Is there a specific course or topic you'd like me to elaborate on?"""
+{data['unified_response'][:2000]}
+
+Answer their question: {question}
+
+Be concise, helpful, and specific to UTD courses and requirements. If you don't know something specific, 
+suggest they consult with their academic advisor. Keep responses brief and actionable.
+"""
+    
+    try:
+        bedrock_client = get_bedrock_client()
+        if not bedrock_client:
+            return "Error: AWS Bedrock client not configured. Please check your AWS credentials."
+        
+        model_id = os.getenv('BEDROCK_MODEL_ID', 'amazon.titan-text-express-v1')
+        
+        # Use Titan Express model format
+        response = bedrock_client.invoke_model(
+            modelId=model_id,
+            body=json.dumps({
+                "inputText": context,
+                "textGenerationConfig": {
+                    "maxTokenCount": 500,
+                    "temperature": 0.7,
+                    "topP": 0.9
+                }
+            }),
+            contentType="application/json"
+        )
+        
+        response_body = json.loads(response['body'].read())
+        return response_body.get('results', [{}])[0].get('outputText', 'No response generated')
+        
+    except ClientError as e:
+        return f"Error: Failed to generate response - {str(e)}"
+    except Exception as e:
+        return f"Error: Unexpected error - {str(e)}"
 
 def display_recommendations(data):
     """Display recommendations in a nice format"""
