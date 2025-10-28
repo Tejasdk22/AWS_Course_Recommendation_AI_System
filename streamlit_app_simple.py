@@ -395,14 +395,14 @@ def generate_chatbot_response(question, data, query_info):
         return """I don't have access to current instructor schedules for specific courses. Here's how to find this information:
 
 📅 **UTD Course Schedule**
-• Visit: https://coursebook.utdallas.edu/
-• Search by course code (e.g., BUAN 6345)
+• Visit: [UTD Coursebook](https://coursebook.utdallas.edu/) to search by course code (e.g., BUAN 6345)
 • View current semester offerings and assigned instructors
+• Check class schedules and availability
 
 📧 **Alternative Methods**
-• Check the UTD Academic Catalog for course coordinators
+• [UTD Academic Catalog](https://catalog.utdallas.edu/) for course coordinators
 • Contact your academic advisor for faculty recommendations
-• Visit department websites for faculty directory
+• Visit department websites for [faculty directory](https://www.utdallas.edu/directory/)
 • Email department admins for current semester instructors
 
 💡 **Tip**: Instructor assignments often change each semester, so checking the current schedule is the most accurate method.
