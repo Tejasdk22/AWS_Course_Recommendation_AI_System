@@ -389,8 +389,31 @@ def get_bedrock_client():
 def generate_chatbot_response(question, data, query_info):
     """Generate chatbot response using AWS Bedrock"""
     
+    # Handle greetings and casual conversation
+    lower_question = question.lower().strip()
+    
+    # Greetings
+    if lower_question in ["hi", "hello", "hey", "good morning", "good afternoon", "good evening", "howdy"]:
+        return f"""Hi! 👋 Nice to meet you! 
+
+I'm your UTD Course Advisor, here to help you with your academic journey. 
+
+I see you're a **{query_info['student_type']}** student in **{query_info['major']}** looking to become a **{query_info['career_goal']}**. That's exciting!
+
+How can I help you today? You can ask me about:
+• 📚 Course requirements and prerequisites
+• 🎯 How specific courses align with your career goals
+• ⏰ Academic timeline and scheduling
+• 📝 What to focus on in your studies
+• 🎓 Or anything else about your UTD courses!
+
+What would you like to know?"""
+    
+    # Thank you responses
+    if "thank" in lower_question or "thanks" in lower_question:
+        return "You're very welcome! 😊 Is there anything else about your courses or career path I can help you with?"
+    
     # Check if asking about professors
-    lower_question = question.lower()
     if "professor" in lower_question or "faculty" in lower_question or "instructor" in lower_question or "teaching" in lower_question:
         return """I don't have access to current instructor schedules for specific courses. Here's how to find this information:
 
