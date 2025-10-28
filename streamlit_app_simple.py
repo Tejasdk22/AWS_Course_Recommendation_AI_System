@@ -87,7 +87,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # API Configuration
-API_ENDPOINT = os.getenv('API_ENDPOINT', 'http://localhost:8000')
+API_ENDPOINT = os.getenv('API_ENDPOINT', 'http://127.0.0.1:8000')
 
 def call_real_api(major, student_type, career_goal):
     """Call the real backend API for course recommendations"""
