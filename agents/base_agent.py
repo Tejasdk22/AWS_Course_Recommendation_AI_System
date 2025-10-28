@@ -10,6 +10,11 @@ import boto3
 from botocore.exceptions import ClientError
 import json
 
+try:
+    from .bedrock_agent_core import invoke_agent_core, is_agent_core_available
+except ImportError:
+    from bedrock_agent_core import invoke_agent_core, is_agent_core_available
+
 
 class BaseAgent(ABC):
     """
@@ -35,6 +40,10 @@ class BaseAgent(ABC):
         
         # Agent configuration
         self.config = self._load_config()
+        
+        # Agent Core configuration
+        self.use_agent_core = os.getenv('USE_BEDROCK_AGENT_CORE', 'false').lower() == 'true'
+        self.agent_core_available = is_agent_core_available()
     
     def _setup_logging(self):
         """Setup logging configuration for the agent."""
@@ -114,16 +123,74 @@ class BaseAgent(ABC):
         """
         pass
     
-    async def invoke_bedrock(self, prompt: str, context: str = None) -> str:
+    async def invoke_bedrock(self, prompt: str, context: str = None, use_agent_core: bool = None) -> str:
         """
         Invoke AWS Bedrock to generate a response.
+        Supports both direct Bedrock runtime and Bedrock Agent Core.
+        
+        Args:
+            prompt: The prompt to send to Bedrock
+            context: Optional context to include in the prompt
+            use_agent_core: Override agent core usage (optional)
+            
+        Returns:
+            Generated response from Bedrock
+        """
+        # Determine whether to use Agent Core
+        should_use_agent_core = use_agent_core if use_agent_core is not None else self.use_agent_core
+        
+        # Use Agent Core if configured and available
+        if should_use_agent_core and self.agent_core_available:
+            return await self._invoke_agent_core(prompt, context)
+        
+        # Fallback to direct Bedrock runtime
+        return await self._invoke_bedrock_runtime(prompt, context)
+    
+    async def _invoke_agent_core(self, prompt: str, context: str = None) -> str:
+        """
+        Invoke Bedrock Agent Core
+        
+        Args:
+            prompt: The prompt to send to Agent Core
+            context: Optional context to include in the prompt
+            
+        Returns:
+            Generated response from Agent Core
+        """
+        try:
+            # Prepare the full prompt with context
+            full_prompt = f"{context}\n\n{prompt}" if context else prompt
+            
+            self.logger.info(f"Invoking Bedrock Agent Core: {prompt[:100]}...")
+            
+            # Invoke Agent Core
+            response = await invoke_agent_core(
+                input_text=full_prompt,
+                session_id=f"{self.agent_name}_{hash(prompt) % 10000}",
+                enable_trace=False
+            )
+            
+            if response['status'] == 'success':
+                self.logger.info("Agent Core invocation successful")
+                return response['output_text']
+            else:
+                self.logger.error(f"Agent Core invocation failed: {response.get('error_code', 'Unknown error')}")
+                return f"Error: Agent Core failed - {response['output_text']}"
+                
+        except Exception as e:
+            self.logger.error(f"Agent Core invocation error: {e}")
+            return f"Error: Agent Core invocation failed - {str(e)}"
+    
+    async def _invoke_bedrock_runtime(self, prompt: str, context: str = None) -> str:
+        """
+        Invoke AWS Bedrock runtime directly
         
         Args:
             prompt: The prompt to send to Bedrock
             context: Optional context to include in the prompt
             
         Returns:
-            Generated response from Bedrock
+            Generated response from Bedrock runtime
         """
         if not self.bedrock_client:
             self.logger.error("Bedrock client not initialized")

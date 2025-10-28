@@ -95,12 +95,20 @@ async def get_career_guidance(request: Dict[str, Any]):
         session_id = request.get("sessionId")
         major = request.get("major")
         student_type = request.get("studentType")
+        use_agent_core = request.get("useAgentCore", False)
         
         if not query:
             raise HTTPException(status_code=400, detail="Query is required")
         
         logger.info(f"Processing career guidance query: {query[:100]}...")
         logger.info(f"Context - Major: {major}, Student Type: {student_type}")
+        logger.info(f"Using Agent Core: {use_agent_core}")
+        
+        # Set Agent Core usage for this request
+        if use_agent_core:
+            os.environ['USE_BEDROCK_AGENT_CORE'] = 'true'
+        else:
+            os.environ['USE_BEDROCK_AGENT_CORE'] = 'false'
         
         # Process the query through the career guidance system
         response = await career_system.process_query(query, session_id, major=major, student_type=student_type)
@@ -114,7 +122,8 @@ async def get_career_guidance(request: Dict[str, Any]):
             "career_matching_analysis": response.career_matching_analysis,
             "project_suggestions": response.project_suggestions,
             "session_id": response.session_id,
-            "timestamp": response.timestamp
+            "timestamp": response.timestamp,
+            "used_agent_core": use_agent_core
         }
         
         logger.info(f"Successfully processed query for session {response.session_id}")

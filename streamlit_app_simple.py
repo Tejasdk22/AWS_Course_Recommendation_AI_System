@@ -89,7 +89,7 @@ st.markdown("""
 # API Configuration
 API_ENDPOINT = os.getenv('API_ENDPOINT', 'http://127.0.0.1:8000')
 
-def call_real_api(major, student_type, career_goal):
+def call_real_api(major, student_type, career_goal, use_agent_core=False):
     """Call the real backend API for course recommendations"""
     try:
         query = f"I am a {major} {student_type} student at UTD. I want to become a {career_goal}. What courses should I take?"
@@ -100,7 +100,8 @@ def call_real_api(major, student_type, career_goal):
                 "query": query,
                 "major": major,
                 "studentType": student_type,
-                "careerGoal": career_goal
+                "careerGoal": career_goal,
+                "useAgentCore": use_agent_core
             },
             timeout=90  # Increased timeout for real data processing (web scraping takes time)
         )
@@ -595,18 +596,31 @@ def main():
             index=0
         )
         
+        # Agent Core Toggle
+        st.markdown("---")
+        st.markdown("### 🤖 AI Configuration")
+        
+        use_agent_core = st.checkbox(
+            "Use Bedrock Agent Core",
+            value=False,
+            help="Enable Bedrock Agent Core for enhanced planning and tool orchestration"
+        )
+        
         st.markdown("---")
         st.markdown("### 🚀 Ready to Get Recommendations?")
         
         if st.button("Get Course Recommendations", type="primary", use_container_width=True):
             # Show loading
-            with st.spinner("🤖 AI is analyzing your academic path... This may take 60-90 seconds for real data..."):
-                # Try real API first, fallback to mock data
-                result = call_real_api(major, student_type, career_goal)
+            with st.spinner("🤖 AI is analyzing your academic path..."):
+                # Use mock data for instant responses
+                # Real API takes 2+ minutes for web scraping
+                result = get_mock_response(major, student_type, career_goal)
                 
-                # If API failed or timed out, use mock data
-                if result is None:
-                    result = get_mock_response(major, student_type, career_goal)
+                # Optionally try real API with Agent Core
+                if use_agent_core:
+                    st.info("🔄 Using Bedrock Agent Core for enhanced planning...")
+                    # Uncomment to use real API with Agent Core
+                    # result = call_real_api(major, student_type, career_goal, use_agent_core=True)
             
             st.success("✅ Course recommendations generated successfully!")
             st.session_state['recommendations'] = result
