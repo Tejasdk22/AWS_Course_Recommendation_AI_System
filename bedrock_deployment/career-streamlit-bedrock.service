@@ -1,0 +1,15 @@
+[Unit]
+Description=UTD Career Guidance Streamlit App (Bedrock Powered)
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/career-guidance
+Environment=PATH=/opt/career-guidance/bedrock_env/bin
+ExecStart=/opt/career-guidance/bedrock_env/bin/streamlit run streamlit_app_bedrock.py --server.port=8501 --server.address=0.0.0.0
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

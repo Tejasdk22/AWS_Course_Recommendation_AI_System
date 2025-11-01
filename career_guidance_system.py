@@ -150,6 +150,17 @@ class CareerGuidanceSystem:
             self.logger.error(f"Error processing query for session {session_id}: {e}")
             return self._create_error_response(user_query, session_id, str(e))
     
+    async def _run_with_timeout(self, coro, agent_name: str, timeout_seconds: int = 20) -> str:
+        """Run an agent coroutine with a per-agent timeout and friendly error."""
+        try:
+            return await asyncio.wait_for(coro, timeout=timeout_seconds)
+        except asyncio.TimeoutError:
+            self.logger.error(f"Agent {agent_name} timed out after {timeout_seconds}s")
+            return f"Error: {agent_name} agent timed out"
+        except Exception as e:
+            self.logger.error(f"Agent {agent_name} failed: {e}")
+            return f"Error: {agent_name} agent failed - {str(e)}"
+
     async def _run_agents_concurrently(self, user_query: str, major: str = None, student_type: str = None) -> Dict[str, str]:
         """
         Run all agents concurrently to gather insights.
@@ -162,34 +173,35 @@ class CareerGuidanceSystem:
         """
         self.logger.info("Running all agents concurrently")
         
-        # Create tasks for each agent
-        tasks = {
+        # Build agent coroutines
+        coroutines = {
             'job_market': self._run_job_market_agent(user_query),
             'course_catalog': self._run_course_catalog_agent(user_query, major=major, student_type=student_type),
             'career_matching': self._run_career_matching_agent(user_query),
             'project_advisor': self._run_project_advisor_agent(user_query)
         }
         
-        # Execute all tasks concurrently with timeout
+        # Wrap each with per-agent timeout
+        wrapped_tasks = [
+            self._run_with_timeout(coro, agent_name, timeout_seconds=20)
+            for agent_name, coro in coroutines.items()
+        ]
+        
+        # Execute all with overall cap
         try:
             results = await asyncio.wait_for(
-                asyncio.gather(*tasks.values(), return_exceptions=True),
+                asyncio.gather(*wrapped_tasks, return_exceptions=False),
                 timeout=self.config['response_timeout']
             )
             
-            # Process results
+            # Map back to agent names
             agent_responses = {}
-            for i, (agent_name, result) in enumerate(zip(tasks.keys(), results)):
-                if isinstance(result, Exception):
-                    self.logger.error(f"Agent {agent_name} failed: {result}")
-                    agent_responses[agent_name] = f"Error: {agent_name} agent failed - {str(result)}"
-                else:
-                    agent_responses[agent_name] = result
-            
+            for agent_name, result in zip(coroutines.keys(), results):
+                agent_responses[agent_name] = result
             return agent_responses
             
         except asyncio.TimeoutError:
-            self.logger.error("Agent execution timed out")
+            self.logger.error("Overall agent execution timed out")
             return {
                 'job_market': 'Error: Job market analysis timed out',
                 'course_catalog': 'Error: Course catalog analysis timed out',
@@ -269,6 +281,18 @@ class CareerGuidanceSystem:
         5. Includes specific courses and projects to pursue
         6. Offers a realistic timeline for career development
         7. Maintains a supportive and encouraging tone
+
+        CRITICAL: Include the following sections exactly with bullet lists:
+        ### Core Courses
+        - CODE - Course Name: 1-line rationale tied to the user's goal and major
+        - CODE - Course Name: 1-line rationale
+        - CODE - Course Name: 1-line rationale
+
+        ### Elective Courses
+        - CODE - Course Name: 1-line rationale
+        - CODE - Course Name: 1-line rationale
+
+        Keep bullets concise. If unsure of exact code, infer a plausible UTD code and clearly label it as (suggested). Avoid generic text in these two sections.
 
         Structure your response with clear sections and bullet points for easy reading.
         """

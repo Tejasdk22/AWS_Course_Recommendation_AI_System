@@ -1,300 +1,246 @@
-# AWS Course Recommendation AI System
+# 🎓 UTD Career Guidance AI System
 
-A comprehensive AI-powered career guidance platform that combines multiple data sources and advanced machine learning to provide personalized career advice, course recommendations, and project guidance.
+An intelligent career guidance system powered by AWS services that provides personalized course recommendations, job market insights, and career path analysis for UTD students.
 
-## 🌟 Features
-
-- **Multi-Agent Architecture**: Four specialized AI agents working together for comprehensive guidance
-- **AWS Bedrock Integration**: Enterprise-grade AI capabilities using Amazon Titan Enterprise 
-- **Real-time Data**: Live job market insights and course recommendations
-- **Career Matching**: Sophisticated algorithms match skills with optimal career paths
-- **Project Guidance**: Hands-on project suggestions for practical experience
-- **Modern UI**: Responsive React frontend with beautiful, intuitive design
-
-
-### AI Agents
-
-1. **JobMarketAgent**: Scrapes and analyzes job postings from LinkedIn and Indeed
-2. **CourseCatalogAgent**: Crawls university course catalogs and extracts skill mappings
-3. **CareerMatchingAgent**: Uses cosine similarity to match job requirements with course skills
-4. **ProjectAdvisorAgent**: Analyzes skill gaps and suggests hands-on projects
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.9+
-- Streamlit
-- AWS Account with Bedrock access
-- Git
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/AWS_Course_Recommendation_AI_System.git
-   cd AWS_Course_Recommendation_AI_System
-   ```
-
-2. **Set up Python environment**
-   ```bash
-   # Create virtual environment
-   python3 -m venv bedrock_env
-   source bedrock_env/bin/activate  # On Windows: bedrock_env\Scripts\activate
-   
-   # Install dependencies
-   pip install -r requirements.txt
-   ```
-
-3. **Configure AWS credentials**
-   ```bash
-   # Copy environment template
-   cp env.example .env
-   
-   # Edit .env with your AWS credentials
-   nano .env
-   ```
-
-4. **Set up frontend**
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-### Running the Application
-
-1. **Start the backend**
-   ```bash
-   # From project root
-   python main.py
-   ```
-
-2. **Start the frontend**
-   ```bash
-   # From frontend directory
-   cd frontend
-   npm start
-   ```
-
-3. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
-
-## 📁 Project Structure
+## 🏗️ Architecture
 
 ```
-aws-career-guidance-ai/
-├── agents/                     # AI Agent implementations
-│   ├── __init__.py
-│   ├── base_agent.py          # Abstract base class
-│   ├── job_market_agent.py    # Job market analysis
-│   ├── course_catalog_agent.py # Course recommendations
-│   ├── career_matching_agent.py # Career matching
-│   └── project_advisor_agent.py # Project suggestions
-├── backend/                   # FastAPI backend
-│   └── main.py               # API server
-├── frontend/                 # React frontend
-│   ├── public/
-│   ├── src/
-│   │   ├── components/       # React components
-│   │   ├── pages/           # Page components
-│   │   ├── context/         # Context providers
-│   │   └── App.js
-│   └── package.json
-├── data/                     # Data storage
-├── logs/                     # Application logs
-├── cache/                    # Response caching
-├── career_guidance_system.py # Main coordination system
-├── main.py                   # CLI interface
-├── requirements.txt          # Python dependencies
-├── setup.py                  # Package setup
-└── README.md
+User → Streamlit (EC2) → API Gateway → AWS Lambda → Response
+                                    ↓
+                            Multi-Agent System
+                                    ↓
+                    ┌───────────────┼───────────────┐
+                    ↓               ↓               ↓
+            JobMarketAgent  CourseCatalogAgent  CareerMatchingAgent
+                                    ↓
+                            ProjectAdvisorAgent
 ```
 
-## 🔧 Configuration
+## 📁 Repository Structure
 
-### Environment Variables
-
-Create a `.env` file with the following variables:
-
-```env
-# AWS Configuration
-AWS_ACCESS_KEY_ID=your_access_key_here
-AWS_SECRET_ACCESS_KEY=your_secret_key_here
-AWS_DEFAULT_REGION=us-east-1
-
-# AWS Bedrock Configuration
-BEDROCK_MODEL_ID=amazon.titan-text-express-v1
-
-# Application Configuration
-LOG_LEVEL=INFO
-MAX_CONCURRENT_REQUESTS=10
-REQUEST_TIMEOUT=30
+```
+├── agents/                          # Multi-Agent System
+│   ├── base_agent.py               # Base agent class
+│   ├── job_market_agent.py         # Job market analysis
+│   ├── course_catalog_agent.py     # UTD course recommendations
+│   ├── career_matching_agent.py    # Career path matching
+│   ├── project_advisor_agent.py    # Project suggestions
+│   └── bedrock_agent_core.py       # Bedrock integration
+│
+├── bedrock_deployment/              # Bedrock Deployment Package
+│   ├── streamlit_app_bedrock.py    # Bedrock-powered Streamlit app
+│   ├── deploy_bedrock.sh           # Deployment script
+│   ├── quick_deploy.sh             # Quick deployment
+│   └── test_bedrock_deployment.sh  # Testing script
+│
+├── career_guidance_system.py        # Full Bedrock-powered system
+├── standalone_lambda_handler.py     # Current deployed Lambda function
+├── streamlit_app_simple.py          # Current Streamlit app (deployed)
+├── streamlit_app_bedrock.py         # Bedrock Streamlit app (local)
+├── setup_api_gateway.py             # API Gateway configuration
+├── test_bedrock_local.py            # Bedrock testing
+├── test_working_bedrock.py          # Multi-agent Bedrock testing
+├── requirements.txt                 # Python dependencies
+├── env.example                      # Environment variables template
+└── README.md                        # This file
 ```
 
-### AWS Bedrock Setup
+## 🚀 Current Deployment
 
-1. **Enable Bedrock in your AWS account**
-   - Go to AWS Bedrock console
-   - Request access to Amazon Titan Express
-   - Wait for approval (usually instant)
+### **Live System:**
+- **Streamlit App**: `http://107.21.159.25:8501`
+- **API Gateway**: `https://avirahgh5d.execute-api.us-east-1.amazonaws.com/prod`
+- **Lambda Function**: `career-guidance-orchestrator`
 
-2. **Configure IAM permissions**
-   ```json
-   {
-     "Version": "2012-10-17",
-     "Statement": [
-       {
-         "Effect": "Allow",
-         "Action": [
-           "bedrock:InvokeModel",
-           "bedrock:InvokeModelWithResponseStream"
-         ],
-         "Resource": "arn:aws:bedrock:*::foundation-model/Amazon-Titan-Express"
-       }
-     ]
-   }
-   ```
+### **How It Works:**
+1. User selects major, student type, and career goal in Streamlit
+2. Streamlit sends HTTP POST request to API Gateway
+3. API Gateway routes to AWS Lambda function
+4. Lambda runs multi-agent system (hardcoded data)
+5. Lambda returns JSON response with recommendations
+6. Streamlit displays results to user
 
-## 🎯 Usage
+## 🤖 Multi-Agent System
 
-### CLI Interface
+### **Agents:**
+
+1. **JobMarketAgent** 📊
+   - Analyzes job market trends
+   - Provides salary information
+   - Identifies required skills
+
+2. **CourseCatalogAgent** 📚
+   - Recommends UTD courses
+   - Provides course descriptions
+   - Categorizes core vs elective courses
+
+3. **CareerMatchingAgent** 🎯
+   - Matches skills with career goals
+   - Analyzes career fit
+   - Suggests skill development paths
+
+4. **ProjectAdvisorAgent** 🚀
+   - Suggests hands-on projects
+   - Provides portfolio ideas
+   - Recommends learning resources
+
+## 🔧 Setup & Installation
+
+### **Prerequisites:**
+```bash
+# Python 3.9+
+python --version
+
+# AWS CLI configured
+aws --version
+aws configure
+```
+
+### **Local Development:**
+```bash
+# Clone repository
+git clone <repository-url>
+cd AWS_Career_Guidance_AI_System
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+cp env.example .env
+# Edit .env with your AWS credentials
+
+# Test Bedrock locally
+python test_bedrock_local.py
+
+# Run Streamlit locally
+streamlit run streamlit_app_simple.py
+```
+
+## 🌐 Deployment
+
+### **Option 1: Current System (Lambda + Hardcoded Data)**
+Already deployed and running:
+- Fast response (~2-5 seconds)
+- Reliable and consistent
+- No external dependencies
+
+### **Option 2: Bedrock-Powered System (Lambda + AI)**
+For AI-powered responses:
 
 ```bash
-# Interactive mode
-python main.py
+# Navigate to deployment package
+cd bedrock_deployment
 
-# Test mode
-python main.py --test
+# Deploy to EC2
+./deploy_bedrock.sh
 
-# Batch mode
-python main.py --batch queries.json
-
-# Create sample queries
-python main.py --create-sample
-```
-
-### API Endpoints
-
-- `POST /api/career-guidance` - Submit career guidance queries
-- `GET /health` - Health check
-- `GET /api/status` - System status
-- `GET /api/sessions` - List active sessions
-- `DELETE /api/sessions/{id}` - Clear specific session
-
-### Example API Usage
-
-```bash
-curl -X POST "http://localhost:8000/api/career-guidance" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "I want to become a data scientist. What should I learn?"}'
+# Test deployment
+./test_bedrock_deployment.sh
 ```
 
 ## 🧪 Testing
 
-### Backend Testing
-
+### **Test Bedrock Connection:**
 ```bash
-# Run all tests
-python -m pytest tests/
-
-# Run specific test file
-python -m pytest tests/test_agents.py
-
-# Run with coverage
-python -m pytest --cov=agents tests/
+python test_bedrock_local.py
 ```
 
-### Frontend Testing
-
+### **Test Multi-Agent System:**
 ```bash
-cd frontend
-npm test
+python test_working_bedrock.py
 ```
 
-## 🚀 Deployment
-
-### AWS Lambda Deployment
-
-1. **Package the application**
-   ```bash
-   # Install dependencies
-   pip install -r requirements.txt -t .
-   
-   # Create deployment package
-   zip -r career-guidance-lambda.zip .
-   ```
-
-2. **Deploy to Lambda**
-   - Upload the zip file to AWS Lambda
-   - Set handler to `career_guidance_system.lambda_handler`
-   - Configure environment variables
-   - Set timeout to 5 minutes
-
-### Docker Deployment
-
+### **Test API Gateway:**
 ```bash
-# Build Docker image
-docker build -t career-guidance-ai .
-
-# Run container
-docker run -p 8000:8000 career-guidance-ai
+curl -X POST "https://avirahgh5d.execute-api.us-east-1.amazonaws.com/prod/api/career-guidance" \
+-H "Content-Type: application/json" \
+-d '{
+    "query": "I want to become a Data Scientist",
+    "major": "Computer Science",
+    "studentType": "Graduate",
+    "careerGoal": "Data Scientist"
+}'
 ```
 
-### AWS Amplify Frontend Deployment
+## 📊 Current vs Bedrock Comparison
 
+| Feature | Current System | Bedrock System |
+|---------|---------------|----------------|
+| **Response Time** | 2-5 seconds | 40-60 seconds |
+| **Data Source** | Hardcoded | Web scraping + AI |
+| **AI Processing** | No | Yes (Amazon Titan) |
+| **Personalization** | Template-based | AI-generated |
+| **Reliability** | Very high | Moderate |
+| **Cost** | Low | Moderate |
+
+## 🔑 Environment Variables
+
+Create a `.env` file:
 ```bash
-cd frontend
-npm run build
-amplify publish
+# AWS Configuration
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_DEFAULT_REGION=us-east-1
+
+# Bedrock Configuration
+BEDROCK_MODEL_ID=amazon.titan-text-express-v1
+
+# API Configuration
+API_ENDPOINT=https://avirahgh5d.execute-api.us-east-1.amazonaws.com/prod
 ```
 
-## 📊 Performance
+## 📚 Documentation
 
-- **Response Time**: Average 2-5 seconds per query
-- **Concurrent Users**: Supports 100+ concurrent requests
-- **Cache Hit Rate**: 80%+ for repeated queries
-- **Uptime**: 99.9% availability
+- **Architecture**: `ARCHITECTURE_EXPLANATION.md` - Detailed system architecture
+- **Bedrock Deployment**: `BEDROCK_DEPLOYMENT_GUIDE.md` - Guide for deploying Bedrock system
 
-## 🔒 Security
+## 🎯 Key Features
 
-- **Data Encryption**: All data encrypted in transit and at rest
-- **AWS IAM**: Fine-grained access control
-- **Input Validation**: Comprehensive input sanitization
-- **Rate Limiting**: Built-in rate limiting for API endpoints
+- ✅ Multi-agent career guidance system
+- ✅ Personalized course recommendations
+- ✅ Job market analysis
+- ✅ Career path matching
+- ✅ Project suggestions
+- ✅ Interactive chatbot
+- ✅ Serverless architecture (AWS Lambda)
+- ✅ Real-time API responses
+- ✅ Scalable deployment
 
-## 🤝 Contributing
+## 🛠️ Tech Stack
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+**Frontend:**
+- Streamlit (Python web framework)
+
+**Backend:**
+- AWS Lambda (Serverless compute)
+- AWS API Gateway (API management)
+- AWS Bedrock (AI/ML service)
+
+**Agents:**
+- Python asyncio (Async processing)
+- aiohttp (HTTP client)
+- BeautifulSoup4 (Web scraping)
+- scikit-learn (Career matching)
+
+## 🚀 Future Enhancements
+
+- [ ] Deploy Bedrock-powered system to production
+- [ ] Add database for storing user preferences
+- [ ] Implement scheduled web scraping (daily/weekly)
+- [ ] Add user authentication
+- [ ] Create admin dashboard
+- [ ] Add analytics and tracking
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is developed for educational purposes.
 
-## 🙏 Acknowledgments
+## 👥 Contributors
 
-- AWS Bedrock for AI capabilities
-- Amazon Titan Express
-- React and Tailwind CSS communities
-- FastAPI and Python ecosystem
+Developed as part of AWS Career Guidance AI System project.
 
-## 📞 Support
+---
 
-- **Documentation**: [Project Wiki](https://github.com/your-username/aws-career-guidance-ai/wiki)
-- **Issues**: [GitHub Issues](https://github.com/your-username/aws-career-guidance-ai/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/aws-career-guidance-ai/discussions)
+**Live System**: `http://107.21.159.25:8501`
 
-## 🔮 Roadmap
-
-- [ ] Integration with more job boards
-- [ ] Advanced skill assessment tests
-- [ ] Resume optimization features
-- [ ] Interview preparation tools
-- [ ] Salary negotiation guidance
-- [ ] Networking recommendations
-- [ ] Mobile app development
+**API Endpoint**: `https://avirahgh5d.execute-api.us-east-1.amazonaws.com/prod`

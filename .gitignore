@@ -75,8 +75,59 @@ aws_access_key_id.txt
 aws_secret_access_key.txt
 aws_session_token.txt
 *.pem
+*.key
+*.crt
+*.cer
 ec2_deployment_info.txt
 user_data.sh
+
+# Sensitive API Keys and Tokens
+*api_key*
+*api-key*
+*apikey*
+*secret*
+*token*
+*password*
+.secrets
+secrets/
+secrets.txt
+secrets.json
+api_keys.txt
+api-keys.json
+
+# Bedrock and AI Service Keys
+bedrock_keys.txt
+bedrock_config.json
+bedrock_credentials.json
+openai_key.txt
+anthropic_key.txt
+
+# Database Credentials
+database.yml
+database.json
+db_credentials.txt
+connection_string.txt
+
+# Session and Auth Tokens
+session_*.json
+auth_token.txt
+jwt_secret.txt
+access_token.txt
+refresh_token.txt
+
+# Deployment Secrets
+deploy_keys/
+deployment_secrets.txt
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+
+# Backup Files (may contain sensitive data)
+*.backup
+*.bak
+*.old
+.backup_*/
+backup_*/
 
 # Temporary files
 *.tmp
